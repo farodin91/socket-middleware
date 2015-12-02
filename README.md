@@ -3,15 +3,15 @@ Use Websocket like koa.js
 
 
 ```js
-var Middleware = require('middleware');
+var Middleware = require('socket-middleware');
 var http = require('http').createServer().listen(3000);
 
-var socket = new Middleware();
+var mv = new Middleware();
 
-socket.use(function*(next){
+mv.use(function*(next){
   this.send('hi');
   yield next;
 });
 
-socket.attach(http);
+mv.attach(http);
 ```
