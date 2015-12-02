@@ -1,0 +1,16 @@
+{
+  "name": "socket-middleware",
+  "version": "0.1.0",
+  "description": "testing",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:farodin91/socket-middleware.git"
+  },
+  "author": "farodin91",
+  "license": "ISC",
+  "dependencies": {
+    "engine.io": "1.5.4",
+    "koa-compose": "3.0.0"
+  }
+}
