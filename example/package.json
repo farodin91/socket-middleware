@@ -1,0 +1,10 @@
+{
+  "name": "socket-middleware-example",
+  "version": "0.1.0",
+  "dependencies": {
+    "engine.io": "1.6.0",
+    "engine.io-client": "1.6.0",
+    "koa": ">=0.21.0",
+    "koa-static": "^1.5.2"
+  }
+}
