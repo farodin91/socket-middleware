@@ -9,6 +9,7 @@ var http = require('http').createServer().listen(3000);
 var socket = new Middleware();
 
 socket.use(function*(next){
+  this.send('hi');
   yield next;
 });
 
