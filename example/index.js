@@ -6,14 +6,19 @@ var koa_static = require('koa-static');
 var http = require('http');
 
 
+var logger = require('./logger.js');
+
+
 app.use(koa_static('./public/', { index: 'index.html' }));
 
 var mw = new Middleware();
+mw.use(logger());
 mw.use(function*(next){
-  console.log("test2");
   //this.send('hi');
+  this.body = "sdsds";
   yield next;
 });
 
 var server = http.Server(app.callback()).listen(8000);
 mw.attach(server);
+console.log("Server is listen on 8000");
