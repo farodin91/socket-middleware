@@ -9,7 +9,7 @@ var http = require('http').createServer().listen(3000);
 var mw = new Middleware();
 
 mw.use(function*(next){
-  this.send('hi');
+  this.body  = 'hi';
   yield next;
 });
 
