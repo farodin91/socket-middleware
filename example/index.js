@@ -15,7 +15,7 @@ var mw = new Middleware();
 mw.use(logger());
 mw.use(function*(next){
   //this.send('hi');
-  this.body = "sdsds";
+  this.body = this.path;
   yield next;
 });
 
