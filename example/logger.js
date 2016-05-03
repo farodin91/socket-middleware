@@ -1,27 +1,26 @@
-
-var chalk = require('chalk');
-var humanize = require('humanize-number');
-var bytes = require('bytes');
+var chalk = require('chalk')
+var humanize = require('humanize-number')
+var bytes = require('bytes')
 var colorCodes = {
   5: 'red',
   4: 'yellow',
   3: 'cyan',
   2: 'green',
   1: 'green'
-};
+}
 
-module.exports = dev;
+module.exports = dev
 
-function dev(opts) {
-  return function *logger(next) {
-    var start = new Date;
-    console.log('  ' + chalk.gray('<--')  + ' ' + chalk.bold('%s')  + ' ' + chalk.gray('%s'), "WEBSOCKET", this.path);
+function dev (opts) {
+  return function * logger (next) {
+    var start = new Date()
+    console.log('  ' + chalk.gray('<--') + ' ' + chalk.bold('%s') + ' ' + chalk.gray('%s'), 'WEBSOCKET', this.path)
     try {
-      yield next;
+      yield next
     } catch (err) {
       // log uncaught downstream errors
-      log(this, start, err);
-      throw err;
+      log(this, start, err)
+      throw err
     }
 
     // calculate the length of a streaming response
@@ -30,53 +29,48 @@ function dev(opts) {
 
     // log when the response is finished or closed,
     // whichever happens first.
-    var ctx = this;
+    var ctx = this
 
-    var onend = done.bind(null, 'end');
+    var onend = done.bind(null, 'end')
 
-    ctx.once('end', onend);
+    ctx.once('end', onend)
 
-    function done(event){
-      ctx.removeListener('end', onend);
-      log(ctx, start, null, event);
+    function done (event) {
+      ctx.removeListener('end', onend)
+      log(ctx, start, null, event)
     }
   }
 }
-function log(ctx, start, err, event) {
+function log (ctx, start, err, event) {
   // get the status code of the response
   var status = err
     ? (err.status || 500)
-    : (ctx.status || 404);
+    : (ctx.status || 404)
 
-  // set the color of the status code;
-  var s = status / 100 | 0;
-  var color = colorCodes[s];
+  // set the color of the status code
+  var s = status / 100 | 0
+  var color = colorCodes[s]
 
   // get the human readable response length
-  var length;
+  var length
   if (~[204, 205, 304].indexOf(status)) {
-    length = '';
-  } else if (null == ctx.body) {
-    length = '-';
+    length = ''
+  } else if (ctx.body === null) {
+    length = '-'
   } else {
-    length = bytes(Buffer.byteLength(ctx.body));
+    length = bytes(Buffer.byteLength(ctx.body))
   }
 
   var upstream = err ? chalk.red('xxx')
     : event === 'close' ? chalk.yellow('-x-')
-    : chalk.gray('-->')
+      : chalk.gray('-->')
 
-  console.log('  ' + upstream
-    + ' ' + chalk.bold('%s')
-    + ' ' + chalk.gray('%s')
-    + ' ' + chalk[color]('%s')
-    + ' ' + chalk.gray('%s')
-    + ' ' + chalk.gray('%s'),
-      "WEBSOCKET",
-      ctx.path,
-      status,
-      time(start),
-      length);
+  console.log('  ' + upstream + ' ' + chalk.bold('%s') + ' ' + chalk.gray('%s') + ' ' + chalk[color]('%s') + ' ' + chalk.gray('%s') + ' ' + chalk.gray('%s'),
+    'WEBSOCKET',
+    ctx.path,
+    status,
+    time(start),
+    length)
 }
 
 /**
@@ -85,10 +79,10 @@ function log(ctx, start, err, event) {
  * in seconds otherwise.
  */
 
-function time(start) {
-  var delta = new Date - start;
+function time (start) {
+  var delta = new Date() - start
   delta = delta < 10000
     ? delta + 'ms'
-    : Math.round(delta / 1000) + 's';
-  return humanize(delta);
+    : Math.round(delta / 1000) + 's'
+  return humanize(delta)
 }
